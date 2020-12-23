@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Container1 from './containers/container1'
@@ -14,6 +14,7 @@ import PrivateComponent from './functional/privatecomponent';
 import UnauthRedirect from './functional/unauthredirect';
 import Home from './functional/home';
 import RenderListItem from './functional/renderlistitem';
+import HooksConatiner1 from './hooks/HooksContainer1';
 
 import * as ACTIONS from './store/actions/actions';
 
@@ -30,15 +31,15 @@ import { Router, Route, Switch, Redirect } from 'react-router';
 export const auth = new Auth()
 
 const handleAuthentication = (props) => {
-  if(props.location.hash) {
+  if (props.location.hash) {
     auth.handleAuth()
   }
 }
 
-const PrivateRoute = ({component: Component, auth }) => (
+const PrivateRoute = ({ component: Component, auth }) => (
   <Route render={props => auth.isAuthenticated() === true
     ? <Component auth={auth} {...props} />
-    : <Redirect to={{pathname:'/redirect'}} />
+    : <Redirect to={{ pathname: '/redirect' }} />
   }
   />
 )
@@ -47,10 +48,10 @@ const PrivateRoute = ({component: Component, auth }) => (
 
 class Routes extends Component {
   componentDidMount() {
-    if(auth.isAuthenticated()) {
+    if (auth.isAuthenticated()) {
       this.props.login_success()
       auth.getProfile()
-      setTimeout(() => {this.props.add_profile(auth.userProfile)}, 400)
+      setTimeout(() => { this.props.add_profile(auth.userProfile) }, 400)
     }
     else {
       this.props.login_failure()
@@ -59,36 +60,38 @@ class Routes extends Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <Router history={history} >
-        <div>
-          <Header auth={auth} />
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/form1' component={Form1} />
-            <Route exact path='/container1' render={() => <Container1 auth={auth} /> } />
-            <Route path='/authcheck' render={() => <AuthCheck auth={auth} /> } />
-            <Route path='/redirect' component={UnauthRedirect} />
-            <Route path='/renderlist' component={RenderList} />
+          <div>
+            <Header auth={auth} />
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route exact path='/form1' component={Form1} />
+              <Route exact path='/container1' render={() => <Container1 auth={auth} />} />
+              <Route path='/authcheck' render={() => <AuthCheck auth={auth} />} />
+              <Route path='/redirect' component={UnauthRedirect} />
+              <Route path='/renderlist' component={RenderList} />
+              <Route path='/hooks' component={HooksConatiner1} />
 
-            <Route path='/callback' render={(props) => { handleAuthentication(props); return <Callback />}} />
-            <Route path="/component1" render={(props) => <Component1 {...props} /> } />
+              <Route path='/callback' render={(props) => { handleAuthentication(props); return <Callback /> }} />
+              <Route path="/component1" render={(props) => <Component1 {...props} />} />
 
-            <Route path="/listitem/:id" component={RenderListItem} />
+              <Route path="/listitem/:id" component={RenderListItem} />
 
-            <PrivateRoute path="/privateroute" auth={auth} component={PrivateComponent} />
-            <PrivateRoute path="/profile" auth={auth} component={Profile} />
+              <PrivateRoute path="/privateroute" auth={auth} component={PrivateComponent} />
+              <PrivateRoute path="/profile" auth={auth} component={Profile} />
 
-          </Switch>
-        </div>
+            </Switch>
+          </div>
         </Router>
       </div>
-    )}
+    )
+  }
 }
 
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     login_success: () => dispatch(ACTIONS.login_success()),
     login_failure: () => dispatch(ACTIONS.login_failure()),
