@@ -29,6 +29,9 @@ class Header extends Component {
         <Link to='/hooks' style={{ padding: '5px' }}>
           hooks
           </Link>
+        <Link to='/HooksForm' style={{ padding: '5px' }}>
+          HooksForm
+          </Link>
         <Link to='/privateroute' style={{ padding: '5px' }}>
           Private Route
           </Link>
