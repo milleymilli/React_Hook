@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import Calculator from '../src/Calculator/Calculator'
 
 import { Provider } from 'react-redux';
 import rootReducer from './store/reducers';
@@ -14,6 +15,6 @@ const store = createStore(rootReducer, composeWithDevTools(
 
 
 ReactDOM.render(<Provider store={store}>
-                  <App />
+                  <Calculator/>
                 </Provider>,
                 document.getElementById('root'));
